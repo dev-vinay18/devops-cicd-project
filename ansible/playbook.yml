@@ -1,0 +1,50 @@
+---
+- name: Configure server and run the Docker container
+  hosts: web
+  become: true
+  vars:
+    image_name: instantprachi/static-site
+    image_tag: latest
+    container_name: static-site
+    host_port: 80
+
+  tasks:
+    - name: Install Docker and pip (Amazon Linux)
+      ansible.builtin.dnf:
+        name:
+          - docker
+          - python3-pip
+        state: present
+
+    - name: Install Docker SDK for Python (needed by Ansible docker modules)
+      ansible.builtin.pip:
+        name: docker
+        state: present
+
+    - name: Start and enable Docker
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Add ec2-user to docker group
+      ansible.builtin.user:
+        name: ec2-user
+        groups: docker
+        append: true
+
+    - name: Pull the application image
+      community.docker.docker_image:
+        name: "{{ image_name }}"
+        tag: "{{ image_tag }}"
+        source: pull
+        force_source: true
+
+    - name: Run the container (restarts automatically on reboot/failure)
+      community.docker.docker_container:
+        name: "{{ container_name }}"
+        image: "{{ image_name }}:{{ image_tag }}"
+        state: started
+        restart_policy: always
+        published_ports:
+          - "{{ host_port }}:80"

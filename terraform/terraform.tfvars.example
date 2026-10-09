@@ -1,0 +1,2 @@
+key_name         = "my-keypair"
+ssh_allowed_cidr = "0.0.0.0/0"   # replace with your-ip/32
