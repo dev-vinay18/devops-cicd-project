@@ -2,12 +2,12 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'instantprachi/static-site'
+        IMAGE_NAME = 'vinayw123/static-site'
         // Jenkins credential (Username with password) holding the Docker Hub login
-        DOCKERHUB  = credentials('dockerhub-creds')
-        REPO_URL   = 'https://github.com/<your-username>/<your-repo>.git'
+        DOCKERHUB  = credentials('dockerhub-cred')
+        REPO_URL   = 'https://github.com/dev-vinay18/devops-cicd-project.git'
         // Elastic IP from `terraform output public_ip`
-        EC2_HOST   = '<elastic-ip>'
+        EC2_HOST   = '13.201.159.231'
     }
 
     triggers {

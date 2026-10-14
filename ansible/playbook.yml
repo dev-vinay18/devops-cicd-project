@@ -3,7 +3,7 @@
   hosts: web
   become: true
   vars:
-    image_name: instantprachi/static-site
+    image_name: vinayw123/static-site
     image_tag: latest
     container_name: static-site
     host_port: 80

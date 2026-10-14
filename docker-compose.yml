@@ -1,6 +1,6 @@
 services:
   web:
-    image: ${IMAGE:-instantprachi/static-site}:${TAG:-latest}
+    image: ${IMAGE:-vinayw123/static-site}:${TAG:-latest}
     container_name: static-site
     ports:
       - "${HOST_PORT:-80}:80"
