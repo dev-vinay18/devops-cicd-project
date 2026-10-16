@@ -7,7 +7,7 @@ pipeline {
         DOCKERHUB  = credentials('dockerhub-cred')
         REPO_URL   = 'https://github.com/dev-vinay18/devops-cicd-project.git'
         // Elastic IP from `terraform output public_ip`
-        EC2_HOST   = '13.201.159.231'
+        EC2_HOST   = '13.201.20.175'
     }
 
     triggers {
