@@ -41,7 +41,7 @@ pipeline {
                 // Needs the "SSH Agent" plugin and an SSH credential with ID ec2-ssh-key
                 sshagent(credentials: ['ec2-ssh-key']) {
                     sh '''
-                        ssh -o StrictHostKeyChecking=no ec2-user@$EC2_HOST "
+                        ssh -o StrictHostKeyChecking=no ubuntu@$EC2_HOST "
                           sudo docker pull $IMAGE_NAME:latest &&
                           (sudo docker rm -f static-site || true) &&
                           sudo docker run -d --name static-site --restart always -p 80:80 $IMAGE_NAME:latest
