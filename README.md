@@ -1,20 +1,20 @@
 DevOps CI/CD Project: GitHub → Jenkins → Docker Hub → AWS EC2
 
-A DevOps project that automates Docker image building, publishing, and deployment using Jenkins, Docker Hub, AWS EC2, and a GitHub webhook.
+A DevOps project that automates Docker image building, publishing, and deployment using Jenkins, Docker Hub, AWS EC2, and GitHub Webhooks.
 
 The project also includes Terraform infrastructure provisioning, Ansible configuration management, Docker Compose, and monitoring with CloudWatch and SNS.
 
-Live Demo
+🌐 Live Demo
 
 * Live Website: http://13.201.20.175
 * GitHub Repository: https://github.com/dev-vinay18/devops-cicd-project
 * Docker Hub Image: https://hub.docker.com/r/vinayw123/static-site
 
-The live website uses HTTP. HTTPS has not been configured.
+Note: The website currently uses HTTP. HTTPS has not been configured.
 
-Architecture
+🏗️ Architecture
 
-Developer pushes code to GitHub
+Developer Pushes Code to GitHub
               |
               v
        GitHub Webhook
@@ -23,14 +23,14 @@ Developer pushes code to GitHub
        Jenkins Pipeline
               |
               v
-       Checkout Source
+       Checkout Source Code
               |
               v
       Build Docker Image
               |
               v
        Push to Docker Hub
-       vinayw123/static-site
+     vinayw123/static-site
               |
               v
        Connect to AWS EC2
@@ -42,42 +42,45 @@ Developer pushes code to GitHub
       Run Docker Container
               |
               v
-         Smoke Test
+          Smoke Test
               |
               v
-       Live Website on EC2
+      Live Website on EC2
 
 Additional infrastructure and configuration management components include Terraform, Ansible, Docker Compose, CloudWatch, and SNS.
 
-Technologies Used
+🛠️ Technologies Used
 
-* AWS EC2
-* AWS VPC and Security Groups
-* AWS Elastic IP
-* AWS CloudWatch and SNS
-* Terraform
-* Ansible
-* Docker
-* Docker Compose
-* Docker Hub
-* Jenkins Declarative Pipeline
-* Git and GitHub
-* Linux and Bash
+* Cloud: AWS EC2, VPC, Security Groups, Elastic IP
+* Infrastructure as Code: Terraform
+* Configuration Management: Ansible
+* Containerization: Docker
+* Container Orchestration: Docker Compose
+* CI/CD: Jenkins Declarative Pipeline
+* Container Registry: Docker Hub
+* Version Control: Git and GitHub
+* Monitoring: AWS CloudWatch and SNS
+* Operating System: Linux
+* Scripting: Bash
 
-Project Structure
+📁 Project Structure
 
 devops-cicd-project/
+│
 ├── ansible/
 │   ├── inventory.ini
 │   ├── playbook.yml
 │   └── requirements.yml
+│
 ├── terraform/
 │   ├── main.tf
 │   ├── monitoring.tf
 │   ├── outputs.tf
 │   ├── variables.tf
 │   └── terraform.tfvars.example
+│
 ├── site/
+│
 ├── Dockerfile
 ├── docker-compose.yml
 ├── docker-compose.dev.yml
@@ -85,15 +88,17 @@ devops-cicd-project/
 ├── .gitignore
 └── README.md
 
-1. Docker: Build the Website Image
+⸻
+
+1. 🐳 Docker: Build and Run the Website
 
 The application uses Nginx to serve the static website.
 
-Build the Docker image locally:
+Build the Docker Image
 
 docker build -t vinayw123/static-site:latest .
 
-Run the container:
+Run the Container
 
 docker run -d \
   --name static-site \
@@ -101,23 +106,27 @@ docker run -d \
   -p 8080:80 \
   vinayw123/static-site:latest
 
-Open the website:
+Access the Website
+
+Open the following URL in your browser:
 
 http://localhost:8080
 
-To stop and remove the container:
+Stop and Remove the Container
 
 docker rm -f static-site
 
-2. Terraform: Provision AWS Infrastructure
+⸻
 
-Terraform provisions the EC2 infrastructure and supporting resources.
+2. ☁️ Terraform: Provision AWS Infrastructure
 
-The configuration includes:
+Terraform provisions the EC2 infrastructure and supporting AWS resources.
+
+Infrastructure Components
 
 * EC2 instance
 * Security Group
-* SSH access restricted to an allowed IP address
+* SSH access restricted to an authorized IP address
 * HTTP access on port 80
 * Docker installation through EC2 user data
 * Elastic IP
@@ -130,52 +139,61 @@ Install and configure:
 
 * Terraform
 * AWS CLI
-* An AWS account with appropriate IAM permissions
+* AWS account with appropriate IAM permissions
 * An existing EC2 key pair
 
-Deploy Infrastructure
-
-Navigate to the Terraform directory:
+Step 1: Navigate to the Terraform Directory
 
 cd terraform
 
-Create your local variables file:
+Step 2: Create the Variables File
 
 cp terraform.tfvars.example terraform.tfvars
 
-Edit terraform.tfvars and configure the required values, including the EC2 key pair and permitted SSH CIDR.
+Edit terraform.tfvars and configure the required values, including:
 
-Initialize Terraform:
+* EC2 key pair name
+* SSH allowed CIDR
+
+Step 3: Initialize Terraform
 
 terraform init
 
-Validate the configuration:
+Step 4: Validate the Configuration
 
 terraform validate
 
-Review the infrastructure changes:
+Step 5: Review the Infrastructure Plan
 
 terraform plan
 
-Create the infrastructure:
+Step 6: Create the Infrastructure
 
 terraform apply
 
-Retrieve the public IP address:
+Review the proposed changes and confirm when prompted.
+
+Step 7: Retrieve the Public IP
 
 terraform output public_ip
 
-Important: Review AWS costs before deployment. Destroy resources when they are no longer required, but only after confirming that you no longer need the live website or Jenkins environment.
+Clean Up Resources
+
+AWS resources can incur charges. After confirming that the website and any required services are no longer needed, destroy the infrastructure if appropriate.
 
 terraform destroy
 
-3. Jenkins: Continuous Integration and Deployment
+Important: Do not destroy resources while you still need the live website or Jenkins environment.
 
-Jenkins automates the application’s build, image publishing, and EC2 deployment.
+⸻
+
+3. 🔄 Jenkins: Continuous Integration and Deployment
+
+Jenkins automates the application build, Docker image publishing, and deployment to EC2.
 
 Jenkins Pipeline Stages
 
-The declarative Jenkinsfile implements these stages:
+The declarative Jenkinsfile implements the following stages:
 
 1. Checkout: Retrieves the source code from GitHub.
 2. Build Docker Image: Builds the application image and tags it with the Jenkins build number and latest.
@@ -184,7 +202,7 @@ The declarative Jenkinsfile implements these stages:
 5. Smoke Test: Checks whether the deployed website responds.
 6. Post Actions: Logs out of Docker Hub after the pipeline.
 
-Docker Hub Image
+Docker Hub Repository
 
 The project publishes images to:
 
@@ -195,28 +213,34 @@ Example image tags:
 vinayw123/static-site:6
 vinayw123/static-site:latest
 
-The numerical tag depends on the Jenkins build number.
+The numerical tag corresponds to the Jenkins build number.
 
 Jenkins Credentials
 
 Configure the following credentials in Jenkins:
 
-Credential ID	Type	Purpose
+Credential ID	Credential Type	Purpose
 dockerhub-cred	Username with password	Docker Hub authentication
 ec2-ssh-key	SSH Username with private key	SSH access to EC2
 
-For dockerhub-cred, use your Docker Hub username and an appropriate Docker Hub access token.
+Docker Hub credentials:
 
-For ec2-ssh-key, configure the SSH username as ubuntu and use the private key corresponding to the public key authorized on the EC2 instance.
+* Username: vinayw123
+* Password field: Docker Hub access token
 
-Never commit credentials, private keys, or access tokens to GitHub.
+EC2 SSH credentials:
+
+* Username: ubuntu
+* Private key: The key corresponding to the public key authorized on the EC2 instance
+
+Never commit passwords, access tokens, private keys, or other secrets to GitHub.
 
 Jenkins Job Configuration
 
 1. Create a Pipeline job named devops-cicd-project.
 2. Select Pipeline script from SCM.
 3. Select Git as the SCM.
-4. Set the repository URL:
+4. Enter the repository URL:
 
 https://github.com/dev-vinay18/devops-cicd-project.git
 
@@ -228,13 +252,13 @@ https://github.com/dev-vinay18/devops-cicd-project.git
 
 Jenkinsfile
 
-7. Ensure the Jenkins machine has Docker installed and the Jenkins user has permission to execute Docker commands.
+7. Ensure Docker is installed on the Jenkins machine and the Jenkins user has permission to execute Docker commands.
 8. Install the SSH Agent plugin.
-9. Save the job and run Build Now.
+9. Save the job and click Build Now.
 
 Verified Pipeline Result
 
-The Jenkins pipeline has successfully completed the following operations:
+The Jenkins pipeline has successfully completed these operations:
 
 * Checked out the GitHub repository.
 * Built the Docker image.
@@ -248,25 +272,26 @@ The latest verified build completed with:
 
 Finished: SUCCESS
 
-4. GitHub Webhook: Automatic Pipeline Trigger
+⸻
+
+4. 🔗 GitHub Webhook: Automatic Pipeline Trigger
 
 The project uses a GitHub webhook to notify Jenkins when code is pushed to the repository.
 
-Jenkins Configuration
+Configure Jenkins
 
-Open the Jenkins job:
-
-devops-cicd-project
-
-Select Configure → Build Triggers and enable:
+1. Open the devops-cicd-project job.
+2. Click Configure.
+3. Open Build Triggers.
+4. Enable:
 
 GitHub hook trigger for GITScm polling
 
-Save the configuration.
+5. Save the configuration.
 
-GitHub Configuration
+Configure GitHub
 
-Open the GitHub repository:
+Open the repository:
 
 Settings → Webhooks
 
@@ -274,7 +299,7 @@ The webhook payload URL should follow this format:
 
 http://<JENKINS_PUBLIC_IP>:8080/github-webhook/
 
-Configure:
+Configure the following settings:
 
 Setting	Value
 Content type	application/json
@@ -286,13 +311,15 @@ GitHub must be able to reach the Jenkins webhook endpoint.
 Verify Automatic Triggering
 
 1. Make a small change to README.md.
-2. Commit the change directly to main.
+2. Commit the change directly to the main branch.
 3. Open the Jenkins job.
 4. Check whether a new build starts without clicking Build Now.
 
-Verification status: The existing GitHub webhook has returned HTTP 200. Automatic pipeline triggering should also be tested by pushing a new commit and confirming that Jenkins starts a build.
+Verification status: The existing GitHub webhook returned HTTP 200. Confirm automatic triggering by pushing a new commit and checking whether Jenkins starts a build automatically.
 
-5. Ansible: Docker Installation and Container Deployment
+⸻
+
+5. ⚙️ Ansible: Docker Installation and Deployment
 
 Ansible automates Docker installation, image retrieval, and container deployment on the target server.
 
@@ -302,35 +329,47 @@ ansible/playbook.yml
 
 Prerequisites
 
-Install Ansible on the control machine and ensure SSH connectivity to EC2.
+* Ansible installed on the control machine
+* SSH connectivity to the EC2 instance
+* Correct EC2 IP address and SSH private-key path
 
 Update ansible/inventory.ini with the correct EC2 public IP, username, and private-key path.
 
-Use the ubuntu username for the current Ubuntu EC2 instance.
+For the current Ubuntu EC2 instance, use the username:
 
-Install Required Collections
+ubuntu
+
+Step 1: Navigate to the Ansible Directory
 
 cd ansible
+
+Step 2: Install Required Collections
+
 ansible-galaxy collection install -r requirements.yml
 
-Test the connection:
+Step 3: Test Connectivity
 
 ansible -i inventory.ini web -m ping
 
-Run the playbook:
+Step 4: Run the Playbook
 
 ansible-playbook -i inventory.ini playbook.yml
+
+Expected Playbook Tasks
 
 The playbook should:
 
 1. Install Docker if required.
 2. Pull vinayw123/static-site:latest.
-3. Start the container and configure it to restart automatically.
-4. Publish the website on port 80.
+3. Start the container.
+4. Configure the container to restart automatically.
+5. Publish the website on port 80.
 
-Ensure the playbook uses the correct Docker Hub image and the appropriate Ubuntu package-management commands.
+Ensure that the playbook uses the correct Docker Hub image and appropriate Ubuntu package-management commands.
 
-6. Docker Compose
+⸻
+
+6. 📦 Docker Compose
 
 Docker Compose provides a convenient way to run the website container.
 
@@ -341,20 +380,20 @@ docker-compose.dev.yml
 
 Development Environment
 
-To run the development configuration:
+Run the development configuration:
 
 docker compose \
   -f docker-compose.yml \
   -f docker-compose.dev.yml \
   up -d
 
-The development site is intended to be accessible at:
+The development website is intended to be accessible at:
 
 http://localhost:8080
 
 Production Environment
 
-To run the production configuration:
+Run the production configuration:
 
 docker compose up -d
 
@@ -362,54 +401,67 @@ The production service should use:
 
 vinayw123/static-site:latest
 
-and publish container port 80 on host port 80.
+The service should publish container port 80 on host port 80.
 
 Optional Automatic Image Updates
 
-If Watchtower is configured in the Compose file, the optional auto-update profile can be started with:
+If Watchtower is configured in the Compose file, start the optional automatic-update profile:
 
 docker compose --profile autoupdate up -d
 
 This feature depends on the actual Watchtower service configuration in the Compose file.
 
-7. Monitoring with CloudWatch and SNS
+⸻
+
+7. 📊 Monitoring with CloudWatch and SNS
 
 The Terraform monitoring configuration includes CloudWatch alarms for:
 
-* High EC2 CPU utilization, above 80%.
+* High EC2 CPU utilization above 80%.
 * EC2 instance status-check failures.
 
 An optional SNS email notification can be configured using the alert_email variable.
 
-To receive notifications, provide an email address and confirm the SNS subscription when AWS sends the confirmation message.
+Enable Email Notifications
 
-These alarms help identify high CPU usage and instance health problems.
+1. Configure the alert_email variable.
+2. Apply the Terraform configuration.
+3. Check your email for the SNS subscription confirmation.
+4. Confirm the subscription.
 
-8. Docker Health Check
+These alarms help identify high CPU usage and EC2 instance health problems.
+
+⸻
+
+8. ❤️ Docker Health Check
 
 The Dockerfile includes an Nginx health check:
 
 HEALTHCHECK --interval=30s --timeout=3s --retries=3 \
   CMD wget -qO- http://localhost/ > /dev/null || exit 1
 
-Check the container’s health with:
+Check Container Health
 
 docker ps
 
-Inspect detailed health information with:
+Inspect Health Information
 
-docker inspect --format='{{json .State.Health}}' static-site
+docker inspect \
+  --format='{{json .State.Health}}' \
+  static-site
 
 The health status depends on whether the container’s health check is passing.
 
-9. Troubleshooting
+⸻
+
+9. 🛠️ Troubleshooting
 
 Website Does Not Open
 
 Check the EC2 Security Group:
 
-* HTTP port 80 must allow the intended public website traffic.
-* SSH port 22 should remain restricted to an authorized IP.
+* HTTP port 80 must allow the intended website traffic.
+* SSH port 22 should remain restricted to an authorized IP address.
 * Confirm that the EC2 instance has a public IP and appropriate network routing.
 
 Check the container:
@@ -430,25 +482,28 @@ Review the Jenkins Console Output and identify the stage that failed.
 
 Check:
 
-* Docker availability and permissions.
-* Docker Hub credentials.
-* SSH credential ID ec2-ssh-key.
-* EC2 SSH connectivity.
-* Container status and port 80 availability.
+* Docker availability and permissions
+* Docker Hub credentials
+* SSH credential ID ec2-ssh-key
+* EC2 SSH connectivity
+* Container status
+* Port 80 availability
 
 GitHub Webhook Does Not Trigger a Build
 
 Check:
 
-* The webhook URL and its trailing slash.
-* GitHub’s recent delivery status.
-* Jenkins’ GitHub webhook trigger setting.
-* Jenkins reachability from the internet.
-* Whether the webhook event is a push to the expected branch.
+* Webhook URL and trailing slash
+* GitHub recent delivery status
+* Jenkins GitHub webhook trigger setting
+* Jenkins reachability from the internet
+* Whether the push targets the expected branch
 
-A successful webhook HTTP response does not by itself prove that the Jenkins job started.
+A successful webhook HTTP response does not, by itself, prove that Jenkins started a build.
 
-10. Security Considerations
+⸻
+
+🔐 Security Considerations
 
 * Keep private SSH keys out of GitHub.
 * Keep terraform.tfvars and Terraform state files out of version control.
@@ -459,12 +514,18 @@ A successful webhook HTTP response does not by itself prove that the Jenkins job
 * Use HTTPS and secure webhook practices for production environments.
 * Avoid exposing Jenkins administration interfaces unnecessarily.
 
-Conclusion
+⸻
 
-This project demonstrates an end-to-end DevOps workflow using GitHub, Jenkins, Docker, Docker Hub, AWS EC2, Terraform, Ansible, and Docker Compose.
+🎯 Conclusion
 
-It combines infrastructure provisioning, configuration management, containerization, continuous integration, deployment automation, and basic monitoring in one project.
+This project demonstrates a DevOps workflow using GitHub, Jenkins, Docker, Docker Hub, AWS EC2, Terraform, Ansible, Docker Compose, CloudWatch, and SNS.
 
-The core Jenkins build, image publishing, EC2 deployment, and smoke test have been verified successfully. Remaining tasks should be checked against the internship requirements before final submission.
+It combines infrastructure provisioning, configuration management, containerization, continuous integration, deployment automation, and basic monitoring.
+
+The core Jenkins build, image publishing, EC2 deployment, and smoke test have been verified successfully. Remaining tasks should be tested against the internship requirements before final submission.
+
+🌐 Live Website
+
+URL: http://13.201.20.175 the internship requirements before final submission.
 ## Live URL
 http://<elastic-ip>
