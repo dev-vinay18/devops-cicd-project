@@ -3,15 +3,12 @@ pipeline {
 
     environment {
         IMAGE_NAME = 'vinayw123/static-site'
-        // Jenkins credential (Username with password) holding the Docker Hub login
         DOCKERHUB  = credentials('dockerhub-cred')
         REPO_URL   = 'https://github.com/dev-vinay18/devops-cicd-project.git'
-        // Elastic IP from `terraform output public_ip`
         EC2_HOST   = '13.201.20.175'
     }
 
     triggers {
-        // Fires when the GitHub webhook calls /github-webhook/
         githubPush()
     }
 
@@ -38,13 +35,12 @@ pipeline {
 
         stage('Deploy to EC2') {
             steps {
-                // Needs the "SSH Agent" plugin and an SSH credential with ID ec2-ssh-key
                 sshagent(credentials: ['ec2-ssh-key']) {
                     sh '''
                         ssh -o StrictHostKeyChecking=no ubuntu@$EC2_HOST "
-                          sudo docker pull $IMAGE_NAME:latest &&
-                          (sudo docker rm -f static-site || true) &&
-                          sudo docker run -d --name static-site --restart always -p 80:80 $IMAGE_NAME:latest
+                            sudo docker pull $IMAGE_NAME:latest &&
+                            (sudo docker rm -f static-site || true) &&
+                            sudo docker run -d --name static-site --restart always -p 80:80 $IMAGE_NAME:latest
                         "
                     '''
                 }
@@ -61,6 +57,7 @@ pipeline {
                 }
             }
         }
+    }
 
     post {
         always {
