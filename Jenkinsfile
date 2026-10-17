@@ -53,10 +53,14 @@ pipeline {
 
         stage('Smoke Test') {
             steps {
-                sh 'sleep 5 && curl -fsS http://$EC2_HOST/ > /dev/null'
+                sshagent(credentials: ['ec2-ssh-key']) {
+                    sh '''
+                        ssh -o StrictHostKeyChecking=no ubuntu@$EC2_HOST \
+                        'curl --max-time 10 -fsS http://localhost/ > /dev/null'
+                    '''
+                }
             }
         }
-    }
 
     post {
         always {
